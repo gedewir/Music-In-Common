@@ -83,7 +83,7 @@ function getMatchedTrackIDs(bothUserTrackIDs){
         //for loop, selecting the user2 track
         for (let i=0; i < user2_tracks.length; i++){
             //if the selected user 1 song and user2 song == true, append to the matchedTracks[] array
-            if (element == user2_tracks[i]){
+            if (element.id == user2_tracks[i].id){
                 matchedTrack.push(element);
             }
         };
@@ -108,15 +108,15 @@ const getMatchedTracks = async(playlistArray, access_token,callback)=>{
                      
                     playlistTrackArray.forEach(element => {
                         if (element.track !== null){
-                            UserTrackIDs.push(element.track.id);
+                            UserTrackIDs.push(element.track);
                         }
                     });
                 };
                 tracks.push(UserTrackIDs);
             }
            
-       var matchedIDs =  callback(tracks);
-       return matchedIDs;
+       var matchedTracks =  callback(tracks);
+       return matchedTracks;
     }
     catch(error){
         console.log(error);
@@ -134,7 +134,7 @@ app.get('/:user_id1/:user_id2', (req,res)=>{
                 'Content-Type': 'application/json'}
             };
        getPlaylistURLs(input_users,accessTokenConfig,getNestedURL)
-            .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig, getMatchedTrackIDs)
+            .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig,getMatchedTrackIDs)
                  .then(responseData=>res.send(responseData)));
        })
 
