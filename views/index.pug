@@ -14,7 +14,14 @@ html
         block content
             main.container
                 h1 Matched Tracks
-                - var matchedTracksArray
-                for matchedTrack in matchedTracksArray
-                    div.container
-                        p=matchedTrack.name
+                div.row.g-3.p-3
+                    - var matchedTracksArray
+                    div.col-xs-12.col-sm-12.col-md-6.col-lg-4
+                        for matchedTrack in matchedTracksArray
+                            div.card
+                                a(href=`${matchedTrack.external_urls.spotify}`)
+                                    img(src=`${matchedTrack.album.images[2].url}`, alt="album cover").card-img-top
+                            div.card-body
+                                a(href=`${matchedTrack.external_urls.spotify}`)
+                                    p=matchedTrack.name
+                                    p=`By ${matchedTrack.artists[0].name}`
