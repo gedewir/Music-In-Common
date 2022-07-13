@@ -1,19 +1,18 @@
-const Buffer = require('buffer').Buffer
 const  express = require('express');
 const app = express();
+const path = require('path');
+const Buffer = require('buffer').Buffer
 const rp = require('request-promise');
 const axios = require('axios');
-const { get } = require('request');
 require('dotenv').config();
+
+app.use(express.static(path.join(__dirname, 'public')));
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'pug');
 
 //converting to client ID and client secret to base64 format
 var clientCombo = `${process.env.SPOTIFY_CLIENT_ID}:${process.env.SPOTIFY_CLIENT_SECRET}`;
 const clientAuth = Buffer.from(clientCombo, 'utf-8').toString("base64");
-
-//use the port assigned in port environment variable or 3000 if none selected
-const port = process.env.PORT || 3000;
-app.listen(port);
-console.log(`App listening on https://localhost:${port}`);
 
 app.use(express.json());
 
@@ -127,7 +126,6 @@ app.get('/:user_id1/:user_id2', (req,res)=>{
     input_users = [req.params.user_id1, req.params.user_id2]
     reqToken()
     .then(accessToken =>{
-        console.log(accessToken);
         var accessTokenConfig =  {
             headers:{
                 'Authorization': `Bearer ${accessToken}`,
@@ -135,7 +133,10 @@ app.get('/:user_id1/:user_id2', (req,res)=>{
             };
        getPlaylistURLs(input_users,accessTokenConfig,getNestedURL)
             .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig,getMatchedTrackIDs)
-                 .then(responseData=>res.send(responseData)));
+                // .then(responseData=>res.send(responseData)));   
+             .then(responseData=>res.render('index', {matchedTracksArray: responseData})));
        })
 
 });
+
+module.exports = app;

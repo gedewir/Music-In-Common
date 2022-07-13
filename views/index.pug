@@ -1,0 +1,20 @@
+doctype html
+html
+    head
+        title="Music in Common by Gede Wirayuda"
+        link(rel="stylesheet", href="/css/style.css", type='text/css')
+        link(rel="stylesheet", href="/css/bootstrap.css", type='text/css')
+        link(rel="shortcut icon", href="favicon.ico", type="image/x-icon")
+        meta(name="viewport",content="width=device-width,initial-scale=1.0")
+    body
+        block header
+            .container.mt-1-px-10
+                nav.navbar.navbar-expand-lg.navbar-light.mx-5
+                    a(href="/").p-2.navbar-brand Music in Common
+        block content
+            main.container
+                h1 Matched Tracks
+                - var matchedTracksArray
+                for matchedTrack in matchedTracksArray
+                    div.container
+                        p=matchedTrack.name
