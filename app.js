@@ -87,7 +87,9 @@ function getMatchedTrackIDs(bothUserTrackIDs){
             }
         };
     });
-    return matchedTrack;
+    //using Set() to create new array where non-duplicate tracks will be stored
+    var nonDuplicateMatchedTracks = [...new Set(matchedTrack)];
+    return nonDuplicateMatchedTracks;
 };
 
 //async functtion to retrieve all tracks inside all users playlists
