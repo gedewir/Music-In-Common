@@ -12,16 +12,50 @@ html
                 nav.navbar.navbar-expand-lg.navbar-light.mx-5
                     a(href="/").p-2.navbar-brand Music in Common
         block content
-            main.container
-                h1 Matched Tracks
-                div.row.g-3.p-3
-                    - var matchedTracksArray
-                    div.col-xs-12.col-sm-12.col-md-6.col-lg-4
-                        for matchedTrack in matchedTracksArray
-                            div.card
-                                a(href=`${matchedTrack.external_urls.spotify}`)
-                                    img(src=`${matchedTrack.album.images[2].url}`, alt="album cover").card-img-top
-                            div.card-body
-                                a(href=`${matchedTrack.external_urls.spotify}`)
-                                    p=matchedTrack.name
-                                    p=`By ${matchedTrack.artists[0].name}`
+            div.container-fluid
+                div.container-xxl
+                    if reqCondition
+                        .container.mb-3
+                            h1 Matched Tracks
+                            - var matchedTracksArray
+                            p=`You have ${matchedTracksArray.length} songs in common!`
+                            table.table.striped
+                                thead
+                                    tr
+                                        th(scope="col")
+                                        th(scope="col") Song
+                                        th(scope="col") Artist
+                                tbody
+                                    for matchedTrack in matchedTracksArray
+                                        tr
+                                            td
+                                                img(src=`${matchedTrack.album.images[2].url}`, alt="album cover")
+                                            td 
+                                                a(href=`${matchedTrack.external_urls.spotify}`)=matchedTrack.name
+                    else
+                        .container
+                            p Enter you and your friend's Spotify ID and see what songs you have in common!
+                            form.form-horizontal
+                                .form-group.mb-3
+                                    label Spotify ID:
+                                    input(type="text", name="spotify_user1").form-control
+                                .form-group.mb-3
+                                    label Spotify ID:
+                                    input(type="text", name="spotify_user2").form-control
+                                .form-group.mb-3
+                                    input(type="submit", value="Submit").btn.btn-primary
+    block footer
+            footer.mt-auto#footer-container
+                div.container-fluid
+                    div.container-xxl.mt-5.mb-5
+                        p.text-light Copyright © Gede Wirayuda | 2022
+                        div.row.text-center
+                            div.col.mt-5
+                                a(href="https://twitter.com/Gede_M8")
+                                    img(src="/assets/svg/twitter.svg", alt="")#social-logos
+                            div.col.mt-5
+                                a(href="https://linkedin.com/in/gede-w")
+                                    img(src="/assets/svg/linkedin.svg", alt="")#social-logos                    
+                            div.col.mt-5
+                                a(href="https://github.com/gedewir")
+                                    img(src="/assets/svg/github.svg", alt="")#social-logos

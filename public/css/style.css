@@ -1,0 +1,5 @@
+#social-logos {
+    max-width: 40px;
+    height: auto;
+    filter: invert(91%) sepia(1%) saturate(2615%) hue-rotate(20deg) brightness(114%) contrast(84%);
+}

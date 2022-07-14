@@ -73,7 +73,7 @@ const getPlaylistURLs = async(users, access_token, callback)=>{
 // callback function to determine whether two track IDs are equal string values
 function getMatchedTrackIDs(bothUserTrackIDs){
     // empty array where matched tracks will be populated
-    var matchedTrack = [];
+    var matchedTracks = [];
     // array of user 1 and 2
     var user1_tracks = bothUserTrackIDs[0];
     var user2_tracks = bothUserTrackIDs[1];
@@ -83,13 +83,11 @@ function getMatchedTrackIDs(bothUserTrackIDs){
         for (let i=0; i < user2_tracks.length; i++){
             //if the selected user 1 song and user2 song == true, append to the matchedTracks[] array
             if (element.id == user2_tracks[i].id){
-                matchedTrack.push(element);
+                matchedTracks.push(element);
             }
-        };
-    });
-    //using Set() to create new array where non-duplicate tracks will be stored
-    var nonDuplicateMatchedTracks = [...new Set(matchedTrack)];
-    return nonDuplicateMatchedTracks;
+        }});
+        
+    return matchedTracks;
 };
 
 //async functtion to retrieve all tracks inside all users playlists
@@ -116,29 +114,49 @@ const getMatchedTracks = async(playlistArray, access_token,callback)=>{
                 tracks.push(UserTrackIDs);
             }
            
-       var matchedTracks =  callback(tracks);
-       return matchedTracks;
+    var matchedTracks =  callback(tracks);
+
+    var uniqueTrackIDs = [];
+    var uniqueTracks = [];
+
+    const unique = matchedTracks.filter(element => {
+        const isDuplicate = uniqueTrackIDs.includes(element.id);
+    
+        if (!isDuplicate) {
+        uniqueTrackIDs.push(element.id);
+        uniqueTracks.push(element);
+        return true;
+            }
+  
+        return false;
+        });
+    return uniqueTracks;
+
     }
     catch(error){
         console.log(error);
     }
-}
+};
 
-app.get('/:user_id1/:user_id2', (req,res)=>{
-    input_users = [req.params.user_id1, req.params.user_id2]
-    reqToken()
-    .then(accessToken =>{
-        var accessTokenConfig =  {
-            headers:{
-                'Authorization': `Bearer ${accessToken}`,
-                'Content-Type': 'application/json'}
-            };
-       getPlaylistURLs(input_users,accessTokenConfig,getNestedURL)
-            .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig,getMatchedTrackIDs)
-                // .then(responseData=>res.send(responseData)));   
-             .then(responseData=>res.render('index', {matchedTracksArray: responseData})));
-       })
-
+app.get('/', (req,res)=>{
+    if (Object.keys(req.query).length === 0){
+        res.render('index', {reqCondition: false});     
+    }
+    else {
+        const input_users = [[req.query.spotify_user1], [req.query.spotify_user2]]
+        reqToken()
+        .then(accessToken =>{
+            var accessTokenConfig =  {
+                headers:{
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'}
+                };
+        getPlaylistURLs(input_users,accessTokenConfig,getNestedURL)
+                .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig,getMatchedTrackIDs)
+                    .then(responseData=>res.send(responseData)));   
+                // .then(responseData=>res.render('index', {matchedTracksArray: responseData, reqCondition: true})));
+        })
+    }
 });
 
 module.exports = app;
