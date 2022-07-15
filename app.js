@@ -153,8 +153,8 @@ app.get('/', (req,res)=>{
                 };
         getPlaylistURLs(input_users,accessTokenConfig,getNestedURL)
                 .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig,getMatchedTrackIDs)
-                    .then(responseData=>res.send(responseData)));   
-                // .then(responseData=>res.render('index', {matchedTracksArray: responseData, reqCondition: true})));
+                    // .then(responseData=>res.send(responseData)));   
+                .then(responseData=>res.render('index', {matchedTracksArray: responseData, reqCondition: true})));
         })
     }
 });

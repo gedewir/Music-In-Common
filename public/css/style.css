@@ -3,3 +3,23 @@
     height: auto;
     filter: invert(91%) sepia(1%) saturate(2615%) hue-rotate(20deg) brightness(114%) contrast(84%);
 }
+
+#footer-container {
+    background-color: #1DB954;
+}
+
+.navbar-container {
+    background-color: #1DB954;
+}
+
+#spotify-logo{
+    max-width: 100px;
+    height: auto;
+}
+
+.attribution-container {
+    background: #191414;
+    color: #FFFFFF;
+}
+
+a {text-decoration: none;}
