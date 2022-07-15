@@ -42,6 +42,19 @@ const reqToken = async () =>{
 
 const spotifyURL = 'https://api.spotify.com/v1/';
 
+//converts Spotify profile URL to Spotify ID
+function linkToID(link){
+    let splitted = link.split("/");
+
+    if (splitted[4].indexOf('?')){
+        let id = splitted[4].split('?');
+        return id = id[0]
+    } 
+    else {
+        return id = splitted[4];
+    }
+};
+
 // callback function to return both user's playlists as nested URL eg. [[URL, URL,...],[URL, URL,...]]
 function getNestedURL(items){
     var nestedURL = [];
@@ -50,6 +63,7 @@ function getNestedURL(items){
     });
     return nestedURL;
 }
+
 
 //async function to return spotify URL playlists
 const getPlaylistURLs = async(users, access_token, callback)=>{
@@ -143,7 +157,7 @@ app.get('/', (req,res)=>{
         res.render('index', {reqCondition: false});     
     }
     else {
-        const input_users = [[req.query.spotify_user1], [req.query.spotify_user2]]
+        const input_users = [[linkToID(req.query.spotify_user1)], [linkToID(req.query.spotify_user2)]]
         reqToken()
         .then(accessToken =>{
             var accessTokenConfig =  {
