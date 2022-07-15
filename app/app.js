@@ -4,6 +4,7 @@ const path = require('path');
 const Buffer = require('buffer').Buffer
 const rp = require('request-promise');
 const axios = require('axios');
+const { userInfo } = require('os');
 require('dotenv').config();
 
 app.use(express.static(path.join(__dirname, 'public')));
@@ -106,7 +107,7 @@ function getMatchedTrackIDs(bothUserTrackIDs){
 };
 
 //async functtion to retrieve all tracks inside all users playlists
-const getMatchedTracks = async(playlistArray, access_token,callback)=>{
+const getMatchedTracks = async(playlistArray, users,access_token,callback)=>{
     try{    
             //empty array which both users' tracks will be populated in format = [ [trackID, trackID,...], [trackID, trackID...]  ]
             var tracks = [];
@@ -130,6 +131,13 @@ const getMatchedTracks = async(playlistArray, access_token,callback)=>{
             }
            
     var matchedTracks =  callback(tracks);
+
+    var userProfiles = [];
+            
+            for(user of users){
+                const userRes = await axios.get(`${spotifyURL}users/${user}`, access_token);
+                userProfiles.push(userRes.data);
+            }
     
     //empty array which will be populated unique trackIDs (IDs only) and tracks (all album, artist, song, etc. info)
     var uniqueTrackIDs = [];
@@ -148,14 +156,28 @@ const getMatchedTracks = async(playlistArray, access_token,callback)=>{
             }
   
         return false;
-        });
-    return uniqueTracks;
+    });
+
+    const frontEndData = [uniqueTracks, userProfiles];
+
+    return frontEndData;
 
     }
     catch(error){
         console.log(error);
     }
 };
+
+// function getUserProfiles(users){
+//     var userInfo = [];
+//     users.forEach(user => {
+//         axios.get(`${spotifyURL}users/${user}`).then(userRes=>{
+//             userInfo.push(userRes.data.body.display_name);
+//         })
+//     });
+//     return userInfo;
+// }
+
 
 app.get('/', (req,res)=>{
     if (Object.keys(req.query).length === 0){
@@ -171,9 +193,9 @@ app.get('/', (req,res)=>{
                     'Content-Type': 'application/json'}
                 };
         getPlaylistURLs(input_users,accessTokenConfig,getNestedURL)
-                .then(responseDataArray=>getMatchedTracks(responseDataArray, accessTokenConfig,getMatchedTrackIDs)
+                .then(responseDataArray=>getMatchedTracks(responseDataArray, input_users, accessTokenConfig,getMatchedTrackIDs)
                     // .then(responseData=>res.send(responseData)));   
-                .then(responseData=>res.render('index', {matchedTracksArray: responseData, reqCondition: true})));
+                .then(responseData=>{res.render('index', {matchedTracksArray: responseData[0], userProfiles: responseData[1], reqCondition: true})}));
         })
     }
 });

@@ -18,8 +18,9 @@ html
                     if reqCondition
                         .container.mb-3
                             h4 Matched Tracks
+                            - var userProfiles
                             - var matchedTracksArray
-                            p=`You have ${matchedTracksArray.length} songs in common!`
+                            p #[strong #{userProfiles[0].display_name}] & #[strong #{userProfiles[1].display_name}] have #[strong #{matchedTracksArray.length}] songs in common!
                             table.table-dark.table
                                 thead
                                     tr
@@ -48,10 +49,10 @@ html
                             form.form-horizontal
                                 .form-group.mb-3
                                     label Spotify Account:
-                                    input(type="text", name="spotify_user1", placeholder="https://open.spotify.com/user/xy5oelfe0lyrrtj5kimv23q0o").form-control
+                                    input(type="text", name="spotify_user1", value="https://open.spotify.com/user/xy5oelfe0lyrrtj5kimv23q0o").form-control
                                 .form-group.mb-3
                                     label Another Spotify Account:
-                                    input(type="text", name="spotify_user2").form-control
+                                    input(type="text", name="spotify_user2", placeholder="https://open.spotify.com/user/your-spotify-account").form-control
                                 .form-group.mb-3
                                     button(type="submit", value="Submit").btn.btn-success.float-end Submit
                         .container.attribution-container.rounded.p-3.my-5

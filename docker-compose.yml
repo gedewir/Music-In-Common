@@ -8,7 +8,7 @@ services:
       - 3000:3000
   web-server:
     build: ./nginx
-    image: wirayuda.azurecr.io/nginx-web-server:latest
+    image: wirayuda.azurecr.io/nginx-music-in-common-web-server:latest
     ports:
       - 80:80
       - 443:443
