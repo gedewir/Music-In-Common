@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  app:
+    build: ./app
+    image: wirayuda.azurecr.io/music-in-common-app:latest
+    ports:
+      - 3000:3000
+  web-server:
+    build: ./nginx
+    image: wirayuda.azurecr.io/nginx-web-server:latest
+    ports:
+      - 80:80
+      - 443:443
+    depends_on:
+      - app

@@ -1,0 +1,78 @@
+doctype html
+html
+    head
+        title="Music in Common | Gede Wirayuda"
+        link(rel="stylesheet", href="/css/style.css", type='text/css')
+        link(rel="stylesheet", href="/css/bootstrap.css", type='text/css')
+        link(rel="shortcut icon", href="favicon.ico", type="image/x-icon")
+        meta(name="viewport",content="width=device-width,initial-scale=1.0")
+    body.d-flex.flex-column.min-vh-100.align-items-stretch
+        block header
+            .container-fluid.mt-1-px-10.navbar-container
+                .container
+                    nav.navbar.navbar-light
+                        a(href="/", style="color: #FFFFFF").p-2.navbar-brand Music in Common
+        block content
+            div.container-fluid.mt-3
+                div.container-xxl
+                    if reqCondition
+                        .container.mb-3
+                            h4 Matched Tracks
+                            - var matchedTracksArray
+                            p=`You have ${matchedTracksArray.length} songs in common!`
+                            table.table-dark.table
+                                thead
+                                    tr
+                                        th(scope="col") Album
+                                        th(scope="col") Song
+                                        th(scope="col") Artist
+                                tbody
+                                    for matchedTrack in matchedTracksArray
+                                        tr
+                                            td
+                                                a(href=`${matchedTrack.album.external_urls.spotify}`)
+                                                    img(src=`${matchedTrack.album.images[2].url}`, alt="album cover")
+                                            td 
+                                                a(href=`${matchedTrack.external_urls.spotify}`, style="text-decoration: none; color: #FFFFFF")=matchedTrack.name
+                                            td
+                                                a(href=`${matchedTrack.artists[0].external_urls.spotify}`, style="text-decoration: none; color: #FFFFFF")=matchedTrack.artists[0].name
+                        .container.attribution-container.rounded.p-3.my-5
+                            p Attribution:
+                            div#spotify-logo
+                                a(href="https://spotify.com") 
+                                    img(src="/assets/Spotify.png", alt="Spotify Logo",).mw-100
+                            p This application was made possible using the <a href="https://developer.spotify.com/documentation/web-api/", style="color: #FFFFFF">Spotify Web API</a>. Source code available on my <a href="https://github.com/gedewir/Music-In-Common", style="color: #FFFFFF">Github repository</a>.
+                    else
+                        .container.p-3
+                            p Enter you and your friend's Spotify account and see what songs you have in common!
+                            form.form-horizontal
+                                .form-group.mb-3
+                                    label Spotify Account:
+                                    input(type="text", name="spotify_user1", placeholder="https://open.spotify.com/user/xy5oelfe0lyrrtj5kimv23q0o").form-control
+                                .form-group.mb-3
+                                    label Another Spotify Account:
+                                    input(type="text", name="spotify_user2").form-control
+                                .form-group.mb-3
+                                    button(type="submit", value="Submit").btn.btn-success.float-end Submit
+                        .container.attribution-container.rounded.p-3.my-5
+                            p Attribution:
+                            div#spotify-logo
+                                a(href="https://spotify.com") 
+                                    img(src="/assets/Spotify.png", alt="Spotify Logo",).mw-100
+                            p Made using the <a href="https://developer.spotify.com/documentation/web-api/", style="color: #FFFFFF">Spotify Web API</a>. Only public information is used in this program, such as a user's public playlist.  Source code available on my <a href="https://github.com/gedewir/Music-In-Common", style="color: #FFFFFF">Github repository</a>.
+    block footer
+            footer.mt-auto#footer-container
+                div.container-fluid
+                    div.container-xxl.mt-5.mb-5
+                        p.text-light Copyright © <a href="https://gedewirayuda.me" style="text-decoration: none; color: #FFFFFF">Gede Wirayuda</a> | 2022
+                        div.row.text-center
+                            div.col.mt-5
+                                a(href="https://twitter.com/Gede_M8")
+                                    img(src="/assets/svg/twitter.svg", alt="")#social-logos
+                            div.col.mt-5
+                                a(href="https://linkedin.com/in/gede-w")
+                                    img(src="/assets/svg/linkedin.svg", alt="")#social-logos                    
+                            div.col.mt-5
+                                a(href="https://github.com/gedewir")
+                                    img(src="/assets/svg/github.svg", alt="")#social-logos
+    script(src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js", integrity="sha384-cn7l7gDp0eyniUwwAZgrzD06kc/tftFf19TOAs2zVinnD/C7E91j9yyk5//jjpt/", crossorigin="anonymous")
